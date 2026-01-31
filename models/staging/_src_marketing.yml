@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: marketing
+    tables:
+      - name: campaign_events
+      - name: customers
+      - name: receipt_items
+      - name: receipts
+      - name: stores
+      
