@@ -1,0 +1,123 @@
+version: 2
+
+models:
+  - name: customer_sales
+    description: "Summary of customer sales including total amount spent and number of purchases."
+    columns:
+      - name: customer_id
+        description: "Unique identifier for each customer."
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('stg_marketing__customers')
+              field: customer_id
+
+      - name: total_spent
+        description: "Total amount spent by the customer."
+        tests:
+          - not_null
+
+      - name: purchase_count
+        description: "Number of purchases made by the customer."
+        tests:
+          - not_null
+
+      - name: email
+        description: "Email address of the customer."
+        tests:
+          - not_null
+          - unique
+
+      - name: marketing_consent
+        description: "Indicates if customer has given marketing consent."
+        tests:
+          - not_null
+          - accepted_values:
+              values: [true, false]
+
+      - name: signup_date
+        description: "Date when the customer signed up."
+        tests:
+          - not_null
+
+  - name: customer_profiles
+    description: "Detailed customer profile including purchase behavior, marketing engagement, and segmentation."
+    columns:
+      - name: customer_id
+        description: "Unique identifier for each customer."
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('stg_marketing__customers')
+              field: customer_id
+
+      - name: email
+        description: "Email address of the customer."
+        tests:
+          - not_null
+          - unique
+
+      - name: marketing_consent
+        description: "Indicates if customer has given marketing consent."
+        tests:
+          - not_null
+          - accepted_values:
+              values: [true, false]
+
+      - name: signup_date
+        description: "Date when the customer signed up."
+        tests:
+          - not_null
+
+      - name: country
+        description: "Country of the customer."
+        tests:
+          - not_null
+
+      - name: total_purchases
+        description: "Total number of purchases made by the customer."
+        tests:
+          - not_null
+
+      - name: total_spent
+        description: "Total amount spent by the customer."
+        tests:
+          - not_null
+
+      - name: first_purchase_date
+        description: "Date of the customer's first purchase."
+        tests:
+          - not_null
+
+      - name: last_purchase_date
+        description: "Date of the customer's most recent purchase."
+        tests:
+          - not_null
+
+      - name: avg_daily_spent
+        description: "Average daily amount spent by the customer."
+    
+
+      - name: campaigns_received
+        description: "Number of marketing campaigns received by the customer."
+        tests:
+          - not_null
+
+      - name: campaigns_opened
+        description: "Number of marketing campaigns opened by the customer."
+        tests:
+          - not_null
+
+      - name: campaigns_clicked
+        description: "Number of marketing campaigns clicked by the customer."
+        tests:
+          - not_null
+
+      - name: customer_segment
+        description: "Customer segment classification based on purchasing behavior."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['inactive', 'at_risk', 'loyal', 'new']
