@@ -1,0 +1,116 @@
+version: 2
+
+models:
+  - name: stg_marketing__campaign_events
+    description: "Staging model for marketing campaign events data."
+    columns:
+      - name: event_id
+        description: "Unique identifier for each campaign event."
+        tests:
+          - not_null
+          - unique
+      - name: customer_id
+        description: "ID of the customer related to the event."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_marketing_customers')
+              field: customer_id
+      - name: campaign_name
+        description: "Name of the campaign triggering the event."
+      - name: channel
+        description: "Channel where the campaign event occurred (e.g., email, sms)."
+      - name: event_type
+        description: "Type of event such as sent, open, click, bounce."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['sent', 'open', 'click', 'bounce']
+      - name: event_ts
+        description: "Timestamp when the event occurred."
+        tests:
+          - not_null
+
+  - name: stg_marketing__customers
+    description: "Staging model for marketing customers data."
+    columns:
+      - name: customer_id
+        description: "Unique customer identifier."
+        tests:
+          - not_null
+          - unique
+      - name: email
+        description: "Customer's email address."
+        tests:
+          - not_null
+      - name: marketing_consent
+        description: "Indicates if customer consented to marketing (boolean)."
+      - name: signup_date
+        description: "Date the customer signed up."
+      - name: country
+        description: "Country of the customer."
+
+  - name: stg_marketing__receipts
+    description: "Staging model for purchase receipts data."
+    columns:
+      - name: receipt_id
+        description: "Unique purchase receipt identifier."
+        tests:
+          - not_null
+          - unique
+      - name: customer_id
+        description: "ID of the customer who made the purchase."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_marketing_customers')
+              field: customer_id
+      - name: retail_store_id
+        description: "ID of the store where purchase occurred."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_marketing_stores')
+              field: retail_store_id
+      - name: purchase_ts
+        description: "Timestamp of the purchase."
+        tests:
+          - not_null
+      - name: total_amount
+        description: "Total amount spent on the receipt."
+
+  - name: stg_marketing__receipt_items
+    description: "Staging model for individual items in purchase receipts."
+    columns:
+      - name: receipt_id
+        description: "ID of the receipt this item belongs to."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_marketing_receipts')
+              field: receipt_id
+      - name: product_id
+        description: "ID of the purchased product."
+        tests:
+          - not_null
+      - name: category
+        description: "Category of the product."
+      - name: price
+        description: "Price of the product item."
+        tests:
+          - not_null
+
+  - name: stg_marketing__stores
+    description: "Staging model for store information."
+    columns:
+      - name: retail_store_id
+        description: "Unique store identifier."
+        tests:
+          - not_null
+          - unique
+      - name: store_name
+        description: "Name of the store."
+      - name: city
+        description: "City where the store is located."
+      - name: country
+        description: "Country where the store is located."
